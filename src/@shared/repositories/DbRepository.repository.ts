@@ -10,18 +10,18 @@ export abstract class DbRepository<T extends { id: ID }, ID> implements IDbRepos
         this.table = table;
     }
 
-    getById(id: ID, idColumnName = 'id'): Promise<T | undefined> {
-        return knex(this.table).where({
+    getById(id: ID, idColumnName = 'id', columns?: (keyof T)[]): Promise<T | undefined> {
+        return knex(this.table).select(columns || `*`).where({
             [idColumnName]: id
         }).first() as Promise<T | undefined>;
     }
 
     paginate(params: IPaginateParams, columns: (keyof T)[] | string = `*`): Promise<IWithPagination<T> | T[]> {
-        if(!params.disabled)
+        if (!params.disabled)
             return knex(this.table)
-                .select(columns) 
+                .select(columns)
                 .paginate(params) as Promise<IWithPagination<T> | T[]>;
-        
+
         return this.list(columns);
     }
 
@@ -29,14 +29,12 @@ export abstract class DbRepository<T extends { id: ID }, ID> implements IDbRepos
         return knex(this.table).select(columns) as Promise<T[]>
     }
 
-    async create(data: Omit<T, 'id'>): Promise<T> {
+    async create(data: Omit<T, 'id'>, hasId = true): Promise<T> {
 
+        const createData = !hasId ? data : { ...data, id: crypto.randomUUID() };
         const result = await knex(this.table)
             .returning("*")
-            .insert({
-                ...data,
-                id: crypto.randomUUID()
-            });
+            .insert(createData);
 
         return result[0] as unknown as T;
     }
@@ -48,8 +46,15 @@ export abstract class DbRepository<T extends { id: ID }, ID> implements IDbRepos
             return knex<T>(this.table).where(filters).select([columns as keyof T]) as Promise<T[] | undefined>;
         }
     }
-    
-    async getOneBy(column: keyof T, value: string | number): Promise<T> {
-        return knex(this.table).where(String(column), value).first()
+
+    async getOneBy(column: keyof T, value: string | number, columns?: (keyof T)[]): Promise<T> {
+        return knex(this.table).select(columns || `*`).where(String(column), value).first()
+    }
+
+    async update(id: ID, data: Partial<T>): Promise<T[] | undefined> {
+        return await knex(this.table)
+            .where({ id })
+            .first()
+            .update(data, `*`) as unknown as Promise<T[] | undefined>;
     }
 }

@@ -1,7 +1,6 @@
 import path from "path";
 import { env } from ".";
 
-console.log(env.EFI_BANK_API_ENV);
 export default {
     sandbox: true,
     client_id: env.EFI_BANK_API_CLIENT_ID,

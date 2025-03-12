@@ -18,16 +18,16 @@ export class UserService {
         return this.userRepository.paginate(params);
     }
 
-    getOneBy(column: keyof IUser, value: string){
+    getOneBy(column: keyof IUser, value: string) {
         return this.userRepository.getOneBy(column, value)
     }
     create(user) {
         return this.userRepository.create(user);
     }
 
-    async firstOrCreate(user: Omit<IUser, 'id'>){
+    async firstOrCreate(user: Omit<IUser, 'id'>) {
         const existUser = await this.getOneBy(`email`, user.email)
-        if(existUser)
+        if (existUser)
             return existUser;
 
         return this.create(user)

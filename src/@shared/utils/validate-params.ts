@@ -27,7 +27,7 @@ export function validateIdExistsByRouteParam(table: string) {
 
 export async function validateByDatabase(value, ctx, table, column) {
     const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
-    if (!isValidUUID) return;
+    if (!value || !isValidUUID ) return;
 
     const record = await knex(table).where(column, value).first();
     if (!record) {

@@ -1,5 +1,6 @@
 export interface IRedacaoItemsCriterioAvaliacao {
-    redacao_id: string;
-    items_criterio_avaliacao: string;
+    id: string;
+    redacoes_id: string;
+    items_criterios_avaliacao_id: string;
     nota: number;
 }

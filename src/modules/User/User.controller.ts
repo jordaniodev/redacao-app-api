@@ -1,6 +1,7 @@
 import { IPaginateParams } from "knex-paginate";
-import { UserService } from "./User.service";
+
 import { IUser } from "../../models/User.model";
+import { UserService } from "./User.service";
 
 export class UserController {
     private userService: UserService;

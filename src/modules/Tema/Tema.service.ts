@@ -46,4 +46,10 @@ export class TemaService {
 
         return this.getById(tema.id);
     }
+
+    getTextosTemaByTemaId(idTema: string) {
+        return this.textoTemaRepository.filter({
+            temas_id: idTema
+        })
+    }
 }
