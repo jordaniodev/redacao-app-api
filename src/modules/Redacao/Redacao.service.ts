@@ -12,6 +12,7 @@ import { DbRedacaoRepository } from "./repository/Redacao.repository";
 import { IRedacaoRepository } from "./repository/Redacao.repository.interface";
 import { DbRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository";
 import { IRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository.interface";
+import { PaymentService } from './../Payment/Payment.service';
 
 export class RedacaoService {
     private redacaoRepository: IRedacaoRepository;
@@ -46,6 +47,7 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
         this.redacaoItemCriterioAvaliacaoRepository = new DbRedacaoItemCriterioAvaliacaoRepository();
         this.temaService = new TemaService();
         this.iaService = new IAService();
+        this.paymentService = new PaymentService();
     }
 
     create(data: Omit<IRedacao, 'id'>) {
@@ -114,7 +116,7 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
                 redacoes_id: id,
                 nota:itemCriterio.nota
             }, false)
-        })
+        });
 
     }
 }
