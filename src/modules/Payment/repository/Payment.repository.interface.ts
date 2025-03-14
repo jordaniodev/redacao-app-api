@@ -5,7 +5,7 @@ import { IPaymentRepository } from './Payment.repository';
 export class DbPaymentRepository extends DbRepository<IPayment, string> implements IPaymentRepository {
 
     constructor() {
-        super(`criterios_avaliacao`)
+        super(`payments`)
     }
 
 }

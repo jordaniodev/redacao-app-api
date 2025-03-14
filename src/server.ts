@@ -1,9 +1,21 @@
 import fastify from 'fastify'
 import { UserRoutes } from './modules/User/User.routes';
-import apiRoutes from './api.routes';
+
 import { z } from 'zod';
 import fs from "fs";
 import efiCrendentials from './env/efiCrendentials';
+import apiRoutes from './routes/api.routes';
+import webhookRoutes from './routes/webhook.routes';
+import path from 'path';
+
+// const httpsOptions = {
+//   cert: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
+//   key: fs.readFileSync("/"),
+//   ca: fs.readFileSync(""),
+//   minVersion: "TLSv1.2",
+//   requestCert: true,
+//   rejectUnauthorized: true,
+// };
 
 const app = fastify()
 
@@ -11,6 +23,8 @@ const PORT = process.env.PORT || 3002;
 
 
 app.register(apiRoutes, { prefix: '/api' });
+
+app.register(webhookRoutes, { prefix: '/webhook' });
 
 app.setErrorHandler((err, req, res) => {
   if (err instanceof z.ZodError)
@@ -21,7 +35,7 @@ app.setErrorHandler((err, req, res) => {
       }))
     });
 
-    return res.status(err.statusCode || 500).send({ message: err.message });
+  return res.status(err.statusCode || 500).send({ message: err.message });
 });
 
 const start = async () => {

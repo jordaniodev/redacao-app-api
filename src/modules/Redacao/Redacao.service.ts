@@ -117,6 +117,5 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
                 nota:itemCriterio.nota
             }, false)
         });
-
     }
 }

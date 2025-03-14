@@ -1,7 +1,8 @@
-import { CriteriosAvaliacaoRoutes } from "./modules/CriteriosAvaliacao/CriteriosAvaliacao.routes";
-import { RedacaoRoutes } from "./modules/Redacao/Redacao.routes";
-import { TemaRoutes } from "./modules/Tema/Tema.routes";
-import { UserRoutes } from "./modules/User/User.routes";
+import { CriteriosAvaliacaoRoutes } from "../modules/CriteriosAvaliacao/CriteriosAvaliacao.routes";
+import { RedacaoRoutes } from "../modules/Redacao/Redacao.routes";
+import { TemaRoutes } from "../modules/Tema/Tema.routes";
+import { UserRoutes } from "../modules/User/User.routes";
+  
 
 
 export default async function (app, options) {

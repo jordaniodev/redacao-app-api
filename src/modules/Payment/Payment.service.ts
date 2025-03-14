@@ -31,10 +31,8 @@ export class PaymentService {
                 "chave": paymentCreated.redacoes_id,
                 "solicitacaoPagador": "Informe o número ou identificador do pedido."
             })
-            console.log(paymentEfiData)
 
             const qrCode = await efiPay.pixGenerateQRCode({ id: paymentEfiData.loc.id })
-            console.log(qrCode)
             const paymentUpdated = this.paymentRepository.update(paymentCreated.id, {
                 code: paymentEfiData.pixCopiaECola,
                 expires_at: new Date(Date.now() + 3500).toISOString(),

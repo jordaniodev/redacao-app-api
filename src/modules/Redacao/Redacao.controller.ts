@@ -30,10 +30,11 @@ export class RedacaoController {
     }
 
     async correct(id: string) {
-        this.paymentService.create({
-            redacoes_id: id
-        }).then((response) => console.log(response));
         
-        return await this.redacaoService.toCorrect(id);
+        this.redacaoService.toCorrect(id);
+
+        return this.paymentService.create({
+            redacoes_id: id
+        });
     }
 }
