@@ -12,10 +12,10 @@ export default defineConfig([
   {
     entry: { "knexfile": "knexFile.ts" }, // Ensure this outputs knexfile.cjs
     outDir: "build",
-    format: ["cjs"], // Force CommonJS
-    dts: false, // No type declarations needed for knexfile
+    format: ["cjs"],
+    dts: false,
     clean: false,
     skipNodeModulesBundle: true,
-    legacyOutput: true, // Ensure compatibility with older CommonJS
+    legacyOutput: true, 
   }
 ]);
