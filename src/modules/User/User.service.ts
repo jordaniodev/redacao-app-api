@@ -21,7 +21,7 @@ export class UserService {
     getOneBy(column: keyof IUser, value: string) {
         return this.userRepository.getOneBy(column, value)
     }
-    create(user) {
+    create(user: Omit<IUser, 'id'>) {
         return this.userRepository.create(user);
     }
 

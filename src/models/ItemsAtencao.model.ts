@@ -1,4 +1,4 @@
-export interface ItemsAtencao {
+export interface IItemsAtencao {
     id: string;
     nome: string;
     descricao: string;

@@ -25,7 +25,7 @@ export function validateIdExistsByRouteParam(table: string) {
     };
 }
 
-export async function validateByDatabase(value, ctx, table, column) {
+export async function validateByDatabase(value: any, ctx: any, table: string, column: string) {
     const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
     if (!value || !isValidUUID ) return;
 

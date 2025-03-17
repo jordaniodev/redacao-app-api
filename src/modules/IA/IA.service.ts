@@ -1,6 +1,5 @@
-
-import { METHODS } from "http";
 import { env } from "../../env";
+import { ChatCompletionMessage, ChatCompletionRequest } from "./IA.service.type";
 
 export class IAService {
     tries = 0;
@@ -12,7 +11,7 @@ export class IAService {
         return this.actualApi === `DEEP_SEEK`;
     }
 
-    async chatCompletion(messages: ChatCompletionMessage[]) {
+    async chatCompletion(messages: ChatCompletionMessage[]): Promise<any> {
         try {
             const bodyData: ChatCompletionRequest = {
                 messages,

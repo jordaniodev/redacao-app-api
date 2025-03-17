@@ -6,7 +6,7 @@ import { Knex } from "knex";
 export abstract class DbRepository<T extends { id: ID }, ID> implements IDbRepository<T, ID> {
     table: string;
 
-    constructor(table) {
+    constructor(table: string) {
         this.table = table;
     }
 

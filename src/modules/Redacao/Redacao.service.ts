@@ -13,6 +13,7 @@ import { IRedacaoRepository } from "./repository/Redacao.repository.interface";
 import { DbRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository";
 import { IRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository.interface";
 import { PaymentService } from './../Payment/Payment.service';
+import { RedacaoGenerated } from "./Redacao.service.type";
 
 export class RedacaoService {
     private redacaoRepository: IRedacaoRepository;
@@ -20,8 +21,9 @@ export class RedacaoService {
     private redacaoItemCriterioAvaliacaoRepository: IRedacaoItemCriterioAvaliacaoRepository;
     private temaService: TemaService;
     private iaService: IAService;
-    private readonly redacaoPromt = 
-`Atue como um professor altamente capacitado em Língua Portuguesa e Redação, com vasta experiência em correção de textos e domínio profundo das normas gramaticais, coesão, coerência e argumentação. Sua tarefa é corrigir uma redação com base em critérios específicos de avaliação, que serão fornecidos em um JSON contendo: Os critérios de avaliação e seus respectivos itens detalhados. O tema da redação. Os textos de apoio do tema da redação. O texto da redação a ser corrigido. Sua correção deve ser extremamente detalhada, precisa e completa, avaliando todos os aspectos do texto com profundidade. A saída da sua resposta deve ser minuciosa, sem quebras de linha ou espaços extras desnecessários, e todos os textos devem ser envolvidos em código HTML para garantir a correta formatação.
+    private paymentService: PaymentService;
+    private readonly redacaoPromt =
+        `Atue como um professor altamente capacitado em Língua Portuguesa e Redação, com vasta experiência em correção de textos e domínio profundo das normas gramaticais, coesão, coerência e argumentação. Sua tarefa é corrigir uma redação com base em critérios específicos de avaliação, que serão fornecidos em um JSON contendo: Os critérios de avaliação e seus respectivos itens detalhados. O tema da redação. Os textos de apoio do tema da redação. O texto da redação a ser corrigido. Sua correção deve ser extremamente detalhada, precisa e completa, avaliando todos os aspectos do texto com profundidade. A saída da sua resposta deve ser minuciosa, sem quebras de linha ou espaços extras desnecessários, e todos os textos devem ser envolvidos em código HTML para garantir a correta formatação.
 
 ### Instruções para a correção:
 1. **Nota final:** A nota da redação deve ser atribuída de **0 a 1000** pontos, calculada proporcionalmente à soma das notas dos critérios de avaliação.
@@ -62,9 +64,9 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
 
             if (redacao.criterios_avaliacao_id) {
                 redacao.criterio_avaliacao = await this.criterioAvaliacaoService.getById(redacao.criterios_avaliacao_id);
-                
-                if(redacao.finished){
-                    const notasItemCriterioAvaliacao = await this.redacaoItemCriterioAvaliacaoRepository.filter({redacoes_id: redacao.id});
+
+                if (redacao.finished) {
+                    const notasItemCriterioAvaliacao = await this.redacaoItemCriterioAvaliacaoRepository.filter({ redacoes_id: redacao.id });
 
                     redacao.criterio_avaliacao!.items_criterios_avaliacao = redacao.criterio_avaliacao?.items_criterios_avaliacao?.map((itemCriterio) => {
                         return {
@@ -101,8 +103,8 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
             }
         ]
 
-        const responseIa = JSON.parse(await this.iaService.chatCompletion(messageToChat));
-        const nota = responseIa.items_criterios_avaliacao.reduce((acc,item) => item.nota + acc, 0);
+        const responseIa = JSON.parse(await this.iaService.chatCompletion(messageToChat)) as RedacaoGenerated;
+        const nota = responseIa.items_criterios_avaliacao.reduce((acc: number, item) => item.nota + acc, 0);
 
         this.redacaoRepository.update(id, {
             comentario: responseIa.comentario,
@@ -114,7 +116,7 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
             this.redacaoItemCriterioAvaliacaoRepository.create({
                 items_criterios_avaliacao_id: itemCriterio.id,
                 redacoes_id: id,
-                nota:itemCriterio.nota
+                nota: itemCriterio.nota
             }, false)
         });
     }
