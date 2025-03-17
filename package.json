@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
@@ -12,7 +13,7 @@
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts",
     "knex:migrate": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts migrate:latest",
-    "migrate:production": "knex migrate:latest --knexfile=build/knexfile.js",
+    "migrate:production": "node -r tsx knex migrate:latest --knexfile=build/knexfile.js",
     "dev:external": "ngrok http http://localhost:3002"
   },
   "keywords": [],
