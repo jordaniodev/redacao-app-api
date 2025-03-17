@@ -16,5 +16,6 @@ export default defineConfig([
     dts: false, // No type declarations needed for knexfile
     clean: false,
     skipNodeModulesBundle: true,
+    legacyOutput: true, // Ensure compatibility with older CommonJS
   }
 ]);
