@@ -16,5 +16,8 @@ export default defineConfig([
     dts: false, // No type declarations needed for knexfile
     clean: false,
     skipNodeModulesBundle: true,
+    outExtension({ format }) {
+      return { js: format === "cjs" ? ".cjs" : ".js" }; // Forces .cjs output
+    },
   }
 ]);
