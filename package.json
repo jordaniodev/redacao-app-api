@@ -12,7 +12,7 @@
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts",
     "knex:migrate": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts migrate:latest",
-    "migrate:production": "knex migrate:latest --knexfile=build/knexFile.mjs",
+    "migrate:production": "knex migrate:latest --knexfile=build/knexFile.cjs",
     "dev:external": "ngrok http http://localhost:3002"
   },
   "keywords": [],
