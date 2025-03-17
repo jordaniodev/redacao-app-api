@@ -6,7 +6,7 @@ const envSchema = z.object({
     DATABASE_USER: z.string(),
     DATABASE_PASSWORD: z.string(),
     DATABASE_NAME: z.string(),
-    DATABASE_PORT: z.number().default(5433),
+    DATABASE_PORT: z.string().default("5433").transform(value => Number(value)).pipe(z.number()),
     PORT: z.number().default(3002),
     EFI_BANK_API_CLIENT_ID: z.string(),
     EFI_BANK_API_CLIENT_SECRET: z.string(),
