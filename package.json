@@ -11,7 +11,7 @@
     "copy-assets": "copyfiles -u 1 src/certs/* build/certs",
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts",
-    "knex:migrate": "npm run knex -- migrate:latest",
+    "knex:migrate": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts migrate:latest",
     "dev:external": "ngrok http http://localhost:3002"
   },
   "keywords": [],
