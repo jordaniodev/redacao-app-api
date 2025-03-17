@@ -10,7 +10,7 @@
     "build": "npm run knex:migrate && tsup src --out-dir build && npm run copy-assets",
     "copy-assets": "copyfiles -u 1 src/certs/* build/certs",
     "lint": "eslint src --ext .ts",
-    "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts",
+    "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexFile.ts",
     "knex:migrate": "npm run knex migrate:latest",
     "dev:external": "ngrok http http://localhost:3002"
   },
