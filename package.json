@@ -7,11 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
-    "build": "tsup && npm run copy-assets && npm run knex:migrate",
+    "build": "tsup && npm run copy-assets && npm run migrate:production",
     "copy-assets": "copyfiles -u 1 src/certs/* build/certs",
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts",
     "knex:migrate": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.ts migrate:latest",
+    "migrate:production": "knex migrate:latest --knexfile=build/knexfile.js",
     "dev:external": "ngrok http http://localhost:3002"
   },
   "keywords": [],
