@@ -14,7 +14,7 @@ export const config: Knex.Config = {
     },
     migrations: {
         extension: 'ts',
-        directory :'./src/database/migrations'
+        directory : env.NODE_ENV === `development` ? './src/database/migrations' : `./database/migrations`
     }
 }
 export const knex = setupKnex(config)
