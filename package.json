@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
-    "build": "npm run knex:migrate && tsup src --out-dir build && npm run copy-assets",
+    "build": "npm run knex:migrate && tsup && npm run copy-assets",
     "copy-assets": "copyfiles -u 1 src/certs/* build/certs",
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexFile.ts",
