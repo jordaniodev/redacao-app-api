@@ -7,7 +7,8 @@ import efiCrendentials from './env/efiCrendentials';
 import apiRoutes from './routes/api.routes';
 import webhookRoutes from './routes/webhook.routes';
 import path from 'path';
-import fastifyCors from 'fastify-cors';
+import fastifyCors from '@fastify/cors';
+
 
 // const httpsOptions = {
 //   cert: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
