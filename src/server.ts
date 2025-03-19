@@ -7,6 +7,7 @@ import efiCrendentials from './env/efiCrendentials';
 import apiRoutes from './routes/api.routes';
 import webhookRoutes from './routes/webhook.routes';
 import path from 'path';
+import fastifyCors from 'fastify-cors';
 
 // const httpsOptions = {
 //   cert: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
@@ -20,6 +21,11 @@ import path from 'path';
 const app = fastify()
 
 const PORT = process.env.PORT || 3002;
+
+app.register(fastifyCors, { 
+  origin: '*' 
+});
+
 
 
 app.register(apiRoutes, { prefix: '/api' });
