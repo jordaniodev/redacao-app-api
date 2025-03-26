@@ -3,7 +3,7 @@ import { z } from 'zod';
 import apiRoutes from './routes/api.routes';
 import webhookRoutes from './routes/webhook.routes';
 import fastifyCors from '@fastify/cors';
-import  fs  from 'fs';
+import fs from 'fs';
 import path from 'path';
 
 const httpsOptions = {
@@ -19,6 +19,8 @@ const api = fastify()
 
 const webhook = fastify({
   https: {
+    cert: fs.readFileSync(path.resolve(`src/certs/cert.pem`)),
+    key: fs.readFileSync(path.resolve(`src/certs/private.pem`)),
     ca: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
     rejectUnauthorized: true,
     requestCert: true,

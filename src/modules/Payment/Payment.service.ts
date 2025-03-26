@@ -27,7 +27,7 @@ export class PaymentService {
                 "valor": {
                     "original": "2.99",
                 },
-                "chave": paymentCreated.redacoes_id,
+                "chave": "e4e80616-13d6-4e08-bcd5-a6059f52d443",
                 "solicitacaoPagador": "Redação Avulsa"
             })
 
