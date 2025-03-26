@@ -1,39 +1,42 @@
 import fastify from 'fastify'
-import { UserRoutes } from './modules/User/User.routes';
-
 import { z } from 'zod';
-import fs from "fs";
-import efiCrendentials from './env/efiCrendentials';
 import apiRoutes from './routes/api.routes';
 import webhookRoutes from './routes/webhook.routes';
-import path from 'path';
 import fastifyCors from '@fastify/cors';
+import  fs  from 'fs';
+import path from 'path';
 
+const httpsOptions = {
+  cert: fs.readFileSync(path.resolve(`src/certs/cert.pem`)),
+  key: fs.readFileSync(path.resolve(`src/certs/private.pem`)),
+  ca: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
+  minVersion: "TLSv1.2",
+  requestCert: true,
+  rejectUnauthorized: true,
+};
 
-// const httpsOptions = {
-//   cert: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
-//   key: fs.readFileSync("/"),
-//   ca: fs.readFileSync(""),
-//   minVersion: "TLSv1.2",
-//   requestCert: true,
-//   rejectUnauthorized: true,
-// };
+const api = fastify()
 
-const app = fastify()
+const webhook = fastify({
+  https: {
+    ca: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
+    rejectUnauthorized: true,
+    requestCert: true,
+    minVersion: "TLSv1.2",
+  }
+})
 
 const PORT = process.env.PORT || 3002;
 
-app.register(fastifyCors, { 
-  origin: '*' 
+api.register(fastifyCors, {
+  origin: '*'
 });
 
+api.register(apiRoutes, { prefix: '/api' });
 
+api.register(webhookRoutes, { prefix: '/webhook' });
 
-app.register(apiRoutes, { prefix: '/api' });
-
-app.register(webhookRoutes, { prefix: '/webhook' });
-
-app.setErrorHandler((err, req, res) => {
+api.setErrorHandler((err, req, res) => {
   if (err instanceof z.ZodError)
     return res.status(422).send({
       errors: err.errors.map(err => ({
@@ -47,8 +50,9 @@ app.setErrorHandler((err, req, res) => {
 
 const start = async () => {
   try {
-    await app.listen({ port: Number(PORT), host: '0.0.0.0' });
-    console.log(`Server running on http://localhost:${PORT}`);
+    await api.listen({ port: Number(PORT), host: '0.0.0.0' });
+    await webhook.listen({ port: 3003, host: '0.0.0.0' });
+    console.log(`Server running on http://localhost:${PORT} and 3003`);
   } catch (err) {
     console.error(err);
     process.exit(1);
@@ -59,12 +63,14 @@ start();
 
 process.on('SIGINT', async () => {
   console.log('Closing server...');
-  await app.close();
+  await api.close();
+  await webhook.close();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('Closing server...');
-  await app.close();
+  await api.close();
+  await webhook.close();
   process.exit(0);
 });

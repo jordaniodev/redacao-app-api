@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
 
 export default async function (app: FastifyInstance) {
-  app.get('/', async () => {
-    return { message: 'Hello Redação' };
+  app.post('/', async (req, res) => {
+    return res.status(200).send();
   });
-
 }
+  

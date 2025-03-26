@@ -8,11 +8,7 @@ import { UserRoutes } from "../modules/User/User.routes";
 
 export default async function (app: FastifyInstance) {
   app.get('/', async () => {
-    return { message: 'Hello Redação' };
-  });
-
-  app.get('/testApi', async () => {
-
+    return { message: 'Hello World Redação' };
   });
 
   app.register(UserRoutes, {

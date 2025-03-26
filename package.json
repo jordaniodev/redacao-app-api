@@ -8,7 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "build": "npm run knex:migrate && tsup && npm run copy-assets",
-    "copy-assets": "copyfiles -u 1 src/certs/* build/certs",
+    "copy-assets": "copyfiles -u 1 src/certs/* build/src",
     "lint": "eslint src --ext .ts",
     "knex": "node --import tsx ./node_modules/knex/bin/cli.js  --knexfile ./knexFile.ts",
     "knex:migrate": "npm run knex migrate:latest",

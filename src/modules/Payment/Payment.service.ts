@@ -14,7 +14,6 @@ export class PaymentService {
     async create(payment: Partial<IPayment>) {
         try {
             const efiPay = new EfiPay(efiCrendentials)
-
             const paymentCreated = await this.paymentRepository.create({
                 created_at: new Date().toISOString(),
                 redacoes_id: payment.redacoes_id!,
@@ -29,7 +28,7 @@ export class PaymentService {
                     "original": "2.99",
                 },
                 "chave": paymentCreated.redacoes_id,
-                "solicitacaoPagador": "Informe o número ou identificador do pedido."
+                "solicitacaoPagador": "Redação Avulsa"
             })
 
             const qrCode = await efiPay.pixGenerateQRCode({ id: paymentEfiData.loc.id })
