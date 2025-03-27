@@ -6,15 +6,6 @@ import fastifyCors from '@fastify/cors';
 import fs from 'fs';
 import path from 'path';
 
-const httpsOptions = {
-  cert: fs.readFileSync(path.resolve(`src/certs/cert.pem`)),
-  key: fs.readFileSync(path.resolve(`src/certs/private.pem`)),
-  ca: fs.readFileSync(path.resolve(`src/certs/certificate-chain-homolog.crt`)),
-  minVersion: "TLSv1.2",
-  requestCert: true,
-  rejectUnauthorized: true,
-};
-
 const api = fastify()
 
 const webhook = fastify({

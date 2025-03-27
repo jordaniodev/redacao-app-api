@@ -120,4 +120,10 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
             }, false)
         });
     }
+
+    payRedacao(id: string) { 
+        return this.redacaoRepository.update(id, {
+            paid_at: new Date().toISOString()
+        });
+    }
 }

@@ -14,5 +14,5 @@ export interface IRedacao {
     comentario?: string;
     finished?: boolean;
     redacoes_items_criterio_avaliacao?: Omit<IRedacaoItemsCriterioAvaliacao, 'id'>[];
-
+    paid_at?: string;
 }
