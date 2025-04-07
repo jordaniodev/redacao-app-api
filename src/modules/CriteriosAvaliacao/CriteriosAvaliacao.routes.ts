@@ -1,7 +1,4 @@
 import { FastifyInstance } from "fastify";
-
-import { IUser } from "../../models/User.model";
-import { z } from "zod";
 import { validateIdExistsByRouteParam, validateParams } from "../../@shared/utils/validate-params";
 import { CriteriosAvaliacaoController } from "./CriteriosAvaliacao.controller";
 import { IZodPaginateParams, paginateValidatorSchema } from "../../@shared/validator/paginate.validator";

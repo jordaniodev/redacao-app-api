@@ -2,8 +2,7 @@ import { FastifyInstance } from "fastify";
 import { validateIdExistsByRouteParam, validateParams } from "../../@shared/utils/validate-params";
 import { CreateRedacaoData, createRedacaoSchema, UpdateRedacaoData, updateRedacaoSchema } from "./Redacao.validator";
 import { RedacaoController } from "./Redacao.controller";
-import { IZodPaginateParams } from "../../../build/@shared/validator/paginate.validator";
-import { paginateValidatorSchema } from "../../@shared/validator/paginate.validator";
+import { IZodPaginateParams, paginateValidatorSchema } from "../../@shared/validator/paginate.validator";
 import { IPaginateParams } from "knex-paginate";
 
 export async function RedacaoRoutes(app: FastifyInstance) {
