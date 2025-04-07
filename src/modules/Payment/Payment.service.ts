@@ -30,7 +30,7 @@ export class PaymentService {
                 redacoes_id: payment.redacoes_id!,
                 txid: paymentEfiData.txid,
                 value: 2.99
-            });          
+            });
 
             const qrCode = await efiPay.pixGenerateQRCode({ id: paymentEfiData.loc.id })
             const paymentUpdated = this.paymentRepository.update(paymentCreated.id, {
@@ -46,11 +46,11 @@ export class PaymentService {
         }
     }
 
-    getByTxId(txId: string){
+    getByTxId(txId: string) {
         return this.paymentRepository.getOneBy(`txid`, txId);
     }
 
-    update(id:string, data: Partial<IPayment>){
+    update(id: string, data: Partial<IPayment>) {
         return this.paymentRepository.update(id, data);
     }
 

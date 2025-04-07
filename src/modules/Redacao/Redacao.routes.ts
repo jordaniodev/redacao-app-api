@@ -2,6 +2,9 @@ import { FastifyInstance } from "fastify";
 import { validateIdExistsByRouteParam, validateParams } from "../../@shared/utils/validate-params";
 import { CreateRedacaoData, createRedacaoSchema, UpdateRedacaoData, updateRedacaoSchema } from "./Redacao.validator";
 import { RedacaoController } from "./Redacao.controller";
+import { IZodPaginateParams } from "../../../build/@shared/validator/paginate.validator.mjs";
+import { paginateValidatorSchema } from "../../@shared/validator/paginate.validator";
+import { IPaginateParams } from "knex-paginate";
 
 export async function RedacaoRoutes(app: FastifyInstance) {
 
@@ -31,4 +34,10 @@ export async function RedacaoRoutes(app: FastifyInstance) {
         const redacao = await redacaoController.correct(id);
         res.send(redacao);
     });
+    
+    app.get(`/`, { preHandler: [validateParams<IZodPaginateParams>(paginateValidatorSchema)]}, async (req, res) => {
+            const requestParams = req.query as IPaginateParams;
+            const temas = await redacaoController.paginate(requestParams)
+            res.send(temas);
+    })
 }

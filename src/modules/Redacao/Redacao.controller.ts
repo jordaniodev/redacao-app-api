@@ -3,6 +3,7 @@ import { RedacaoService } from "./Redacao.service";
 import { CreateRedacaoData, UpdateRedacaoData } from "./Redacao.validator";
 import { UserService } from './../User/User.service';
 import { PaymentService } from "../Payment/Payment.service";
+import { IPaginateParams } from "knex-paginate";
 
 export class RedacaoController {
 
@@ -36,5 +37,10 @@ export class RedacaoController {
         return this.paymentService.create({
             redacoes_id: id
         });
+    }
+
+    
+    async paginate(params: IPaginateParams) {
+        return this.redacaoService.paginate(params);
     }
 }

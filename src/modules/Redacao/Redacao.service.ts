@@ -14,6 +14,7 @@ import { DbRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoIt
 import { IRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository.interface";
 import { PaymentService } from './../Payment/Payment.service';
 import { RedacaoGenerated } from "./Redacao.service.type";
+import { IPaginateParams } from "knex-paginate";
 
 export class RedacaoService {
     private redacaoRepository: IRedacaoRepository;
@@ -125,5 +126,10 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
         return this.redacaoRepository.update(id, {
             paid_at: new Date().toISOString()
         });
+    }
+
+    
+    paginate(params: IPaginateParams) {
+        return this.redacaoRepository.paginate(params);
     }
 }
