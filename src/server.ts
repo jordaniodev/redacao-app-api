@@ -27,7 +27,7 @@ api.register(fastifyCors, {
 
 api.register(apiRoutes, { prefix: '/api' });
 
-api.register(webhookRoutes, { prefix: '/webhook' });
+api.register(webhookRoutes);
 
 api.setErrorHandler((err, req, res) => {
   if (err instanceof z.ZodError)
@@ -44,8 +44,7 @@ api.setErrorHandler((err, req, res) => {
 const start = async () => {
   try {
     await api.listen({ port: Number(PORT), host: '0.0.0.0' });
-    await webhook.listen({ port: 3003, host: '0.0.0.0' });
-    console.log(`Server running on http://localhost:${PORT} and 3003`);
+    console.log(`Server running on http://localhost:${PORT}`);
   } catch (err) {
     console.error(err);
     process.exit(1);
