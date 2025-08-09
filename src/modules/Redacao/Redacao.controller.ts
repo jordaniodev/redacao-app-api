@@ -1,4 +1,3 @@
-import { IRedacao } from "../../models/Redacao.model";
 import { RedacaoService } from "./Redacao.service";
 import { CreateRedacaoData, UpdateRedacaoData } from "./Redacao.validator";
 import { UserService } from './../User/User.service';
@@ -30,12 +29,12 @@ export class RedacaoController {
         return await this.redacaoService.update(id, data)
     }
 
-    async correct(id: string) {
+    async correct(id: string, conteudo: string) {
         
-        this.redacaoService.toCorrect(id);
+        this.redacaoService.toCorrect(id, conteudo);
 
         return this.paymentService.create({
-            redacoes_id: id
+            redacoes_id: id,
         });
     }
 

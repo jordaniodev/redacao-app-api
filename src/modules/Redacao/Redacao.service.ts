@@ -1,13 +1,8 @@
 import { IRedacao } from "../../models/Redacao.model";
 import { CriteriosAvaliacaoService } from "../CriteriosAvaliacao/CriteriosAvaliacao.service";
-import { DbCriteriosAvaliacaoRepository } from "../CriteriosAvaliacao/repository/CriteriosAvaliacao.repository";
-import { ICriteriosAvaliacaoRepository } from "../CriteriosAvaliacao/repository/CriteriosAvaliacao.repository.interface";
 import { IAService } from "../IA/IA.service";
 import { ChatCompletionMessage } from "../IA/IA.service.type";
-import { DbTemaRepository } from "../Tema/repository/Tema.repository";
-import { ITemaRepository } from "../Tema/repository/Tema.repository.interface";
 import { TemaService } from "../Tema/Tema.service";
-import { CreateRedacaoData } from "./Redacao.validator";
 import { DbRedacaoRepository } from "./repository/Redacao.repository";
 import { IRedacaoRepository } from "./repository/Redacao.repository.interface";
 import { DbRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoItemCriterioAvaliacao.repository";
@@ -15,11 +10,17 @@ import { IRedacaoItemCriterioAvaliacaoRepository } from "./repository/RedacaoIte
 import { PaymentService } from './../Payment/Payment.service';
 import { RedacaoGenerated } from "./Redacao.service.type";
 import { IPaginateParams } from "knex-paginate";
+import { IRedacaoItemAtencaoRepository } from "./repository/RedacaoItemAtencao.repository.interface";
+import { DbRedacaoItemAtencaoRepository } from "./repository/RedacaoItemAtencao.repository";
+import { DbItemAtencaoRedacaoRepository } from "./repository/ItemAtencaoRedacao.repository";
+import { IItemAtencaoRedacaoRepository } from "./repository/ItemAtencaoRedacao.repository.interface";
 
 export class RedacaoService {
     private redacaoRepository: IRedacaoRepository;
     private criterioAvaliacaoService: CriteriosAvaliacaoService;
     private redacaoItemCriterioAvaliacaoRepository: IRedacaoItemCriterioAvaliacaoRepository;
+    private redacaoItemAtencaoRepository: IRedacaoItemAtencaoRepository;
+    private itemAtencaoRepository: IItemAtencaoRedacaoRepository;
     private temaService: TemaService;
     private iaService: IAService;
     private paymentService: PaymentService;
@@ -48,6 +49,8 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
         this.redacaoRepository = new DbRedacaoRepository();
         this.criterioAvaliacaoService = new CriteriosAvaliacaoService();
         this.redacaoItemCriterioAvaliacaoRepository = new DbRedacaoItemCriterioAvaliacaoRepository();
+        this.redacaoItemAtencaoRepository = new DbRedacaoItemAtencaoRepository();
+        this.itemAtencaoRepository = new DbItemAtencaoRedacaoRepository();
         this.temaService = new TemaService();
         this.iaService = new IAService();
         this.paymentService = new PaymentService();
@@ -75,6 +78,13 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
                             nota: notasItemCriterioAvaliacao?.find((nota) => nota.items_criterios_avaliacao_id == itemCriterio.id)?.nota
                         }
                     })
+
+                    const items_atencao_redacao = await this.itemAtencaoRepository.filter({ redacoes_id: redacao.id });
+                    redacao.items_atencao = (await Promise.all(
+                        items_atencao_redacao?.map(async (item) => {
+                            return await this.redacaoItemAtencaoRepository.filter({ id: item.items_atencao_id }) || []
+                        }) ?? []
+                    )).flat();
                 }
             }
 
@@ -92,7 +102,11 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
         return await this.redacaoRepository.update(id, data);
     }
 
-    async toCorrect(id: string) {
+    async toCorrect(id: string, conteudo: string) {
+         this.redacaoRepository.update(id, {
+            conteudo,
+        })
+
         const messageToChat: ChatCompletionMessage[] = [
             {
                 content: this.redacaoPromt,
@@ -108,6 +122,7 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
         const nota = responseIa.items_criterios_avaliacao.reduce((acc: number, item) => item.nota + acc, 0);
 
         this.redacaoRepository.update(id, {
+            conteudo,
             comentario: responseIa.comentario,
             nota,
             finished: true
@@ -120,6 +135,19 @@ Formato JSON: {\"comentario\":\"\",\"items_criterios_avaliacao\":[{\"id\":\"\",\
                 nota: itemCriterio.nota
             }, false)
         });
+
+        for (const itemAtencao of responseIa.items_atencao) {
+            const itemCriado = await this.redacaoItemAtencaoRepository.create({
+                nome: itemAtencao.nome,
+                descricao: itemAtencao.descricao,
+                como_melhorar: itemAtencao.como_melhorar
+            });
+
+            await this.itemAtencaoRepository.create({
+                items_atencao_id: itemCriado.id,
+                redacoes_id: id
+            });
+        }
     }
 
     payRedacao(id: string) { 

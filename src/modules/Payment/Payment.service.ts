@@ -31,7 +31,7 @@ export class PaymentService {
 
       await efiPay.pixConfigWebhook(
         { chave: "e4e80616-13d6-4e08-bcd5-a6059f52d443" },
-        { webhookUrl: env.WEBHOOK_URL }
+        { webhookUrl: 'https://redacao-app-0eee4f588161.herokuapp.com/webhook/pix?ignorar=' }
       );
 
       const paymentCreated = await this.paymentRepository.create({

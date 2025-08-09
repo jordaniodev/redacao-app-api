@@ -30,7 +30,8 @@ export async function RedacaoRoutes(app: FastifyInstance) {
 
     app.post(`/:id/corrigir`, { preHandler: [validateIdExistsByRouteParam(`redacoes`)] }, async (req, res) => {
         const { id } = req.params as { id: string };
-        const redacao = await redacaoController.correct(id);
+        const { conteudo } = req.body as { conteudo: string };
+        const redacao = await redacaoController.correct(id, conteudo);
         res.send(redacao);
     });
     
