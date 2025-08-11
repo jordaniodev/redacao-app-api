@@ -1,4 +1,5 @@
 import { ICriteriosAvaliacao } from "./CriteriosAvaliacao.model";
+import { IItemsAtencao } from "./ItemsAtencao.model";
 import { IRedacaoItemsCriterioAvaliacao } from "./RedacaoItemsCriterioAvaliacao.model";
 import { ITemas } from "./Temas.model";
 
@@ -15,4 +16,5 @@ export interface IRedacao {
     finished?: boolean;
     redacoes_items_criterio_avaliacao?: Omit<IRedacaoItemsCriterioAvaliacao, 'id'>[];
     paid_at?: string;
+    items_atencao?: Array<IItemsAtencao>;
 }
