@@ -17,7 +17,6 @@ const envSchema = z.object({
     IA_DEEP_SEEK_TOKEN: z.string(),
     IA_DEFAULT_API: z.enum(['DEEP_SEEK', 'GPT']),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-    WEBHOOK_URL: z.string()
 })
 
 export const _env = envSchema.safeParse(process.env)
