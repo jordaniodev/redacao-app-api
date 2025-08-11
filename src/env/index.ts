@@ -16,7 +16,8 @@ const envSchema = z.object({
     IA_GPT_TOKEN: z.string(),
     IA_DEEP_SEEK_TOKEN: z.string(),
     IA_DEFAULT_API: z.enum(['DEEP_SEEK', 'GPT']),
-    NODE_ENV: z.enum(['development', 'test', 'production']).default('development')
+    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    EFI_CERT_BASE64: z.string(),
 })
 
 export const _env = envSchema.safeParse(process.env)
